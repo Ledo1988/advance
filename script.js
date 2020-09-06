@@ -5,8 +5,18 @@ const buttonStep = document.querySelectorAll('.button-direction');
 let step = 0;
 let currentExercise = [];
 
-buttonExercise.forEach(item => item.addEventListener('click', (event) => exerciseOpen(event)))
-buttonStep.forEach(item => item.addEventListener('click', (event) => exerciseStep(event)))
+buttonExercise.forEach(item => item.addEventListener('click', (event) => exerciseOpen(event)));
+buttonStep.forEach(item => item.addEventListener('click', (event) => exerciseStep(event)));
+
+document.addEventListener( "click", questionButtonListener );
+
+function questionButtonListener(event){
+	let element = event.target;
+	if(element.classList.contains("question__button")){
+		questionCheck();
+	}
+}
+
 
 function exerciseOpen(event) {
 	const button = event.target.closest('.button_exercise');
@@ -66,9 +76,9 @@ function showArticle(obj) {
 	const article = Object.values(obj)[0];
 
 	mainBlock.innerHTML = `<div class="article">
-<h1 class="article__title">${article.title}</h1>
-<div class="article__text">${article.text}</div>
-</div>`
+							<h1 class="article__title">${article.title}</h1>
+							<div class="article__text">${article.text}</div>
+							</div>`
 }
 
 function showText(obj) {
@@ -87,17 +97,69 @@ function showQuestion(obj) {
 		type = "checkbox";
 	}
 
-	console.log(variants)
+	let variantListHtml = getVariants();
 
+	function getVariants() {
+		let string = "";
+
+		for (const [key, value] of Object.entries(variants)) {
+			const correct = answer.find(answer => answer === key);
+
+			if (correct !== undefined) {
+				string = string + `<li class="question__item">
+								<label class="question__label"> ${value}
+								<input type="${type}" class="question__input" data-correct="true" name="group">
+								<span class="question__checkmark"></span>
+								</label>
+								</li>`
+			} else {
+				string = string + `<li class="question__item">
+								<label class="question__label"> ${value}
+								<input type="${type}" class="question__input" name="group">
+								<span class="question__checkmark"></span>
+								</label>
+								</li>`
+			}
+		}
+
+		return string;
+	}
 
 
 	mainBlock.innerHTML = `<div class="question">
-<h1 class="question__title">Вопрос</h1>
-<h2 class="question__sub-title">${question.title}</h2>
-<div class="article__text"></div>
-</div>`
+							<h1 class="question__title">Вопрос</h1>
+							<h2 class="question__sub-title">${question.title}</h2>
+							<ul class="question__list">${variantListHtml}</ul>
+							<button type="button" class="question__button">Ответить</button>
+							<p class="question__comment question__comment_error">Неверный ответ</p>
+							<p class="question__comment question__comment_correct">Верный ответ. Нажмите далее</p>
+							</div>`
+
+	const firstInput = document.querySelectorAll('.question__input')[0];
+	firstInput.checked = true;
 }
 
+function questionCheck() {
+	const mainQuestion = document.querySelector('.question');
+
+	let inputAll = document.querySelectorAll('.question__input');
+	inputAll = Array.from(inputAll);
+	const inputCheckedArray = inputAll.filter(item => item.checked);
+	const inputCorrectArray = inputAll.filter(item => item.dataset.correct);
+	const inputTrue = inputCheckedArray.map(item => item.dataset.correct ? true : "")
+
+	if (inputCorrectArray.length === inputTrue.length && !inputTrue.includes('')) {
+		mainQuestion.classList.add('question_correct');
+		if (mainQuestion.classList.contains('question_error')) {
+			mainQuestion.classList.remove('question_error')
+		}
+	} else {
+		mainQuestion.classList.add('question_error');
+		if (mainQuestion.classList.contains('question_correct')) {
+			mainQuestion.classList.remove('question_correct')
+		}
+	}
+}
 
 function exerciseStep(event) {
 	const button = event.target.closest('.button-direction');

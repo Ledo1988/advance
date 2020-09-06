@@ -1,0 +1,28 @@
+.question {
+
+}
+
+.question .question__comment {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    transition: opacity.2s ease-in-out;
+    overflow: hidden;
+}
+
+.question.question_error .question__comment.question__comment_error {
+    opacity: 1;
+    height: auto;
+    width: auto;
+    pointer-events: auto;
+    background-color: red;
+}
+
+.question.question_correct .question__comment.question__comment_correct {
+    opacity: 1;
+    height: auto;
+    width: auto;
+    pointer-events: auto;
+    background-color: green;
+}
