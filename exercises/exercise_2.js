@@ -7,18 +7,22 @@ const exercise_2 = [
 	{text: "<p>Параграф 4</p><p>Параграф 5</p><p>Параграф 6</p>"},
 	{question: {
 			title: "Вопрос 5",
-			varTrue: "var1",
-			var1: "Вариант 1",
-			var2: "Вариант 2",
-			var3: "Вариант 3",
+			varTrue: ["var1"],
+			variables: {
+				var1: "Вариант 1",
+				var2: "Вариант 2",
+				var3: "Вариант 3",
+			}
 		}
 	},
 	{question: {
 			title: "Вопрос 6",
-			varTrue: "var2",
-			var1: "Вариант 4",
-			var2: "Вариант 5",
-			var3: "Вариант 6",
+			varTrue: ["var2", "var3"],
+			variables: {
+				var1: "Вариант 4",
+				var2: "Вариант 5",
+				var3: "Вариант 6",
+			}
 		}
 	},
 	{ video: "Видео 4"},
